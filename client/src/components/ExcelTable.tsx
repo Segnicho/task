@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Table, Button, Popconfirm, Input } from "antd";
 import * as xlsx from "xlsx";
+import axios from "axios";
 
 interface RowData {
   key: number;
@@ -30,12 +31,22 @@ const ExcelToJsonTable: React.FC = () => {
     }
   };
 
-  const handleDelete = (key: number) => {
+  const handleDelete = async (key: number) => {
     const updatedJson = jsonData.filter((row) => row.key !== key);
     setJsonData(updatedJson);
+    try {
+      await axios.delete(`/api/products/${key}`);
+      console.log("Row deleted successfully");
+    } catch (error) {
+      console.error("Failed to delete row:", error);
+    }
   };
 
-  const handleFieldChange = (value: string, dataIndex: string, key: number) => {
+  const handleFieldChange = async (
+    value: string,
+    dataIndex: string,
+    key: number
+  ) => {
     const updatedJson = jsonData.map((row) => {
       if (row.key === key) {
         return { ...row, [dataIndex]: value };
@@ -43,6 +54,13 @@ const ExcelToJsonTable: React.FC = () => {
       return row;
     });
     setJsonData(updatedJson);
+
+    try {
+      await axios.put(`/api/products/${key}`, { [dataIndex]: value });
+      console.log("Field updated successfully");
+    } catch (error) {
+      console.error("Failed to update field:", error);
+    }
   };
 
   const columns = jsonData.length

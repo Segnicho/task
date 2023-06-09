@@ -1,17 +1,16 @@
 import express from "express";
 import dotenv from "dotenv";
-import cors from 'cors';
+import cors from "cors";
 import cookieParser from "cookie-parser";
 
-import productRoute from './routes/product.route'
+import productRoute from "./routes/product.route";
 
-import mysql from 'mysql2'
+import mysql from "mysql2";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000; 
-
+const PORT = process.env.PORT || 5000;
 
 const connectMYSQL = () => {
   const connection = mysql.createConnection({
@@ -31,26 +30,24 @@ const connectMYSQL = () => {
   });
 };
 
-
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 app.use(cookieParser());
 
-
-app.use('/api/products',productRoute)
+app.use("/api/products", productRoute);
 
 // error handling
-app.use((err, req, res, next)=>{
-    const status = err.status || 500
-    const message = err.message || "Sth went wrong";
-    return res.status(status).json({
-        success:false,
-        message, status
-    })
-})
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+  const message = err.message || "Sth went wrong";
+  return res.status(status).json({
+    success: false,
+    message,
+    status,
+  });
+});
 
-
-app.listen(PORT, ()=>{
-    connectMYSQL()
-    console.log("Backend Running");
-})
+app.listen(PORT, () => {
+  connectMYSQL();
+  console.log("Backend Running");
+});

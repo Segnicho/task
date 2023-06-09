@@ -1,4 +1,5 @@
 import Product from "../models/product.model";
+
 export const createItem = async (req, res) => {
   try {
     const newItem = await Product.create(req.body);
@@ -32,7 +33,7 @@ export const updateItem = async (req, res) => {
   try {
     const [updatedRowsCount, updatedRows] = await Product.update(req.body, {
       where: { id },
-      returning: true, // Return the updated rows
+      returning: true,
     });
 
     if (updatedRowsCount === 0) {
@@ -45,7 +46,7 @@ export const updateItem = async (req, res) => {
   }
 };
 
-module.exports = {
+export default {
   createItem,
   getItems,
   deleteItem,
