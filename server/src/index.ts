@@ -5,7 +5,7 @@ import cookieParser from "cookie-parser";
 
 import productRoute from "./routes/product.route.js";
 
-import sequelize from "./db";
+import sequelize from "./db.js";
 
 dotenv.config();
 
@@ -19,15 +19,18 @@ app.use(cookieParser());
 app.use("/api/products", productRoute);
 
 sequelize
-  .sync()
+  .authenticate()
+  .then(() => {
+    console.log("Database connected successfully");
+    return sequelize.sync(); 
+  })
   .then(() => {
     console.log("Database synchronized");
   })
   .catch((error: any) => {
-    console.error("Error synchronizing database:", error);
+    console.error("Error connecting to the database:", error);
   });
 
 app.listen(PORT, (): void => {
-  console.log(process.env.MYSQL_USERNAME);
   console.log("Backend Running");
 });

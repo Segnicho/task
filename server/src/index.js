@@ -12,14 +12,17 @@ app.use(express.json());
 app.use(cookieParser());
 app.use("/api/products", productRoute);
 sequelize
-    .sync()
+    .authenticate()
+    .then(() => {
+    console.log("Database connected successfully");
+    return sequelize.sync();
+})
     .then(() => {
     console.log("Database synchronized");
 })
     .catch((error) => {
-    console.error("Error synchronizing database:", error);
+    console.error("Error connecting to the database:", error);
 });
 app.listen(PORT, () => {
-    console.log(process.env.MYSQL_USERNAME);
     console.log("Backend Running");
 });
