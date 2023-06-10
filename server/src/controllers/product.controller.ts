@@ -1,6 +1,7 @@
+import { Request, Response } from "express";
 import Product from "../models/product.model";
 
-export const createItem = async (req, res) => {
+export const createItem = async (req:Request, res:Response) => {
   try {
     const newItem = await Product.create(req.body);
     res.status(201).json(newItem);
@@ -9,7 +10,7 @@ export const createItem = async (req, res) => {
   }
 };
 
-export const getItems = async (req, res) => {
+export const getItems = async (req:Request, res:Response) => {
   try {
     const items = await Product.findAll();
     res.status(200).json(items);
@@ -18,7 +19,7 @@ export const getItems = async (req, res) => {
   }
 };
 
-export const deleteItem = async (req, res) => {
+export const deleteItem = async (req:Request, res:Response) => {
   const { id } = req.params;
   try {
     await Product.destroy({ where: { id } });
@@ -28,7 +29,7 @@ export const deleteItem = async (req, res) => {
   }
 };
 
-export const updateItem = async (req, res) => {
+export const updateItem = async (req:Request, res:Response) => {
   const { id } = req.params;
   try {
     const [updatedRowsCount, updatedRows] = await Product.update(req.body, {
